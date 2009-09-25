@@ -1,13 +1,13 @@
 (ns org.altlaw.util.jruby
-  (:require [clojure.contrib.singleton :as sing]
-            [clojure.contrib.java-utils :as j])
+  (:require [clojure.contrib.java-utils :as j])
   (:import (javax.script SimpleBindings ScriptContext
                          ScriptEngine ScriptEngineManager)))
 
-(def #^{:private true} jruby
-     (sing/per-thread-singleton
-      (fn []
-        (.getEngineByName (ScriptEngineManager.) "jruby"))))
+(def #^{:private true} *jruby*
+     (delay (.getEngineByName (ScriptEngineManager.) "jruby")))
+
+(defn- jruby []
+  (force *jruby*))
 
 (defn- make-bindings [m]
   (let [bindings (SimpleBindings.)]
@@ -16,6 +16,8 @@
    bindings))
 
 (defn eval-jruby
+  "Evaluates script, a string of Ruby code.  Optional bindings is a
+  keyword=>value map for global bindings."
   ([script]
      (.eval (jruby) script))
   ([script bindings]
@@ -26,7 +28,9 @@
 (derive java.lang.Number ::java-object)
 (derive java.lang.Boolean ::java-object)
 
-(defmulti convert-jruby class)
+(defmulti
+  #^{:doc "Converts a JRuby object to a compatible Clojure type."}
+  convert-jruby class)
 
 (defmethod convert-jruby org.jruby.RubySymbol [x]
   (keyword (str x)))
