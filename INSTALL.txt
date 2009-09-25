@@ -1,0 +1,12 @@
+Because of bugs in the JRuby Maven plugin, Hpricot has to be installed
+manually.  Use the following command to install Hpricot:
+
+mvn -fn jruby-rake:install-gems -Djruby.gems='--no-rdoc --no-ri hpricot --version ~>0.6.1'
+
+
+This will display an error message if Hpricot is already installed,
+which you can ignored.
+
+
+This only needs to be done once, after which "mvn install" should be
+sufficient to build the project.
