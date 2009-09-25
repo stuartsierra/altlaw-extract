@@ -13,7 +13,9 @@
   <packaging>jar</packaging>
 
   <properties>
-    <!-- JRuby 1.3.x plugin fails on Linux; need dev snapshot -->
+    <!-- JRuby 1.3.x plugin fails on Linux; need dev snapshot,
+         compiled from TRUNK source and deployed to altlaw-dev
+         repository. -->
     <jruby.version>1.4.0dev</jruby.version>
     <gem.options>--no-rdoc --no-ri --user-install</gem.options>
     <!-- Gem install of Hpricot fails if version is specified and
