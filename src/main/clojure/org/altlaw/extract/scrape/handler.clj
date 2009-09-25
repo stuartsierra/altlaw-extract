@@ -1,13 +1,14 @@
 (ns org.altlaw.extract.scrape.handler
   (:require [org.altlaw.util.jruby :as ruby]
-            [clojure.contrib.walk :as walk]
-            [clojure.contrib.singleton :as sing]))
+            [clojure.walk :as walk]))
 
-(def scraper-handler
-     (sing/per-thread-singleton
-      (fn []
-        (ruby/eval-jruby "require 'org/altlaw/extract/scrape/scraper_handler'")
-        (ruby/eval-jruby "ScraperHandler.new"))))
+(def #^{:private true} *scraper-handler*
+     (delay
+      (ruby/eval-jruby "require 'org/altlaw/extract/scrape/scraper_handler'")
+      (ruby/eval-jruby "ScraperHandler.new")))
+
+(defn scraper-handler []
+  (force *scraper-handler*))
 
 (defn run-scrapers [download]
   (assert (map? download))
