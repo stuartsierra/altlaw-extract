@@ -12,18 +12,6 @@
   <artifactId>altlaw-extract</artifactId>
   <packaging>jar</packaging>
 
-  <properties>
-    <!-- JRuby 1.3.x plugin fails on Linux; need dev snapshot,
-         compiled from TRUNK source and deployed to altlaw-dev
-         repository. -->
-    <jruby.version>1.4.0dev</jruby.version>
-    <gem.options>--no-rdoc --no-ri --user-install</gem.options>
-    <!-- Gem install of Hpricot fails if version is specified and
-         Hpricot is already installed.  See INSTALL.txt for
-         workaround. -->
-    <required.gems>jruby-openssl json-jruby</required.gems>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.clojure</groupId>
@@ -72,34 +60,17 @@
       <version>1.2</version>
     </dependency>
     <dependency>
-      <groupId>org.jruby</groupId>
-      <artifactId>jruby-complete</artifactId>
-      <version>${jruby.version}</version>
+      <groupId>org.altlaw</groupId>
+      <artifactId>altlaw-jruby</artifactId>
+      <version>1.4.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
 
   <build>
     <plugins>
       <plugin>
-        <groupId>org.altlaw</groupId>
+        <groupId>com.theoryinpractise</groupId>
         <artifactId>clojure-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.jruby.plugins</groupId>
-        <artifactId>jruby-rake-plugin</artifactId>
-        <version>${jruby.version}</version>
-        <executions>
-          <execution>
-            <id>install-gems</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>install-gems</goal>
-            </goals>
-            <configuration>
-              <gems>${gem.options} ${required.gems}</gems>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
